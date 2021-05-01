@@ -25,12 +25,8 @@ class ViewController: UIViewController {
         print (segue.identifier!)
         if segue.identifier == "showScanner" {
             let scannerVC = segue.destination as! ScannerViewController
-            scannerVC.onDoneBlock = { text in self.lblBalance.text = text }
+            scannerVC.callback = { text in self.lblBalance.text = text }
         }
-    }
-    
-    func scanDone () {
-        lblBalance.text = balance
     }
 }
 

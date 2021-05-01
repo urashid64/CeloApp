@@ -12,13 +12,10 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
     var captureSession: AVCaptureSession!
     var previewLayer: AVCaptureVideoPreviewLayer!
 
-    var result: String!
-    var mainViewController: ViewController?
-    var onDoneBlock: ((String?) -> Void)?
+    var callback: ((String?) -> Void)?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        mainViewController = self.storyboard!.instantiateViewController(withIdentifier: "MainViewController") as? ViewController
 
         view.backgroundColor = UIColor.black
         captureSession = AVCaptureSession()
@@ -100,7 +97,7 @@ class ScannerViewController: UIViewController, AVCaptureMetadataOutputObjectsDel
 
     func found(code: String) {
         print(code)
-        onDoneBlock?(code)
+        callback?(code)
     }
     
     override var prefersStatusBarHidden: Bool {

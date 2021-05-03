@@ -10,9 +10,9 @@ import UIKit
 class ViewController: UIViewController {
 
     @IBOutlet weak var lblQRCode: UILabel!
-    @IBOutlet weak var lblAddress: UILabel!
-    @IBOutlet weak var lblBalance: UILabel!
-
+    @IBOutlet weak var lblCELO: UILabel!
+    @IBOutlet weak var lblCUSD: UILabel!
+    
     var textObserver: NSKeyValueObservation?
 
     var address: String!
@@ -34,8 +34,8 @@ class ViewController: UIViewController {
         
         balance = ""
         lblQRCode.text = ""
-        lblAddress.text = ""
-        lblBalance.text = ""
+        lblCELO.text = ""
+        lblCUSD.text = ""
 
         textObserver = lblQRCode.observe(\.text) { [weak self] (label, observedChange) in
             self?.parseURL(text: self?.lblQRCode.text ?? "")
@@ -65,8 +65,17 @@ class ViewController: UIViewController {
         address = dict["address"]
         let addr = String((dict["address"]?.dropFirst(2))!)
         
-        self.lblAddress.text = addr.uppercased().separate(every: 4)
-        self.lblBalance.text = "Fetching..."
+        let str = addr.uppercased().separate(every: 4)
+        let addrComponents = str.components(separatedBy: " ")
+        
+        for tag in 101...110 {
+            if let label = self.view.viewWithTag(tag) as? UILabel {
+                label.text = addrComponents[tag - 101]
+            }
+        }
+
+        lblCELO.text = "Fetching..."
+        lblCUSD.text = "$$$"
     }
     
     
@@ -105,7 +114,8 @@ class ViewController: UIViewController {
     
     
     func formatBalance(account: celoAccount) -> Void {
-        lblBalance.text = String("CELO: \(account.celo)\ncUSD: \(account.cUsd)")
+        lblCELO.text = account.celo
+        lblCUSD.text = account.cUsd
     }
 }
 

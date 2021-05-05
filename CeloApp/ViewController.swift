@@ -62,6 +62,7 @@ class ViewController: UIViewController {
                 dict[item.name] = item.value!
             }
         }
+        print (dict)
         address = dict["address"]
         let addr = String((dict["address"]?.dropFirst(2))!)
         
@@ -116,6 +117,9 @@ class ViewController: UIViewController {
     func formatBalance(account: celoAccount) -> Void {
         lblCELO.text = account.celo
         lblCUSD.text = account.cUsd
+    }
+
+    @IBAction func cancelPayment( _ seg: UIStoryboardSegue) {
     }
 }
 

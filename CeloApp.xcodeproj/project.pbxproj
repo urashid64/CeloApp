@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9FB186F22640BB2200A514EC /* PaymentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB186F12640BB2200A514EC /* PaymentViewController.swift */; };
 		9FF59CE2263CAEF90024CFD4 /* ScannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF59CE1263CAEF90024CFD4 /* ScannerViewController.swift */; };
 		9FF6808B262A5AD600274448 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF6808A262A5AD600274448 /* AppDelegate.swift */; };
 		9FF6808D262A5AD600274448 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FF6808C262A5AD600274448 /* SceneDelegate.swift */; };
@@ -17,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		9FB186F12640BB2200A514EC /* PaymentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentViewController.swift; sourceTree = "<group>"; };
 		9FF59CE1263CAEF90024CFD4 /* ScannerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScannerViewController.swift; sourceTree = "<group>"; };
 		9FF68087262A5AD600274448 /* CeloApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CeloApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9FF6808A262A5AD600274448 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -62,6 +64,7 @@
 				9FF6808C262A5AD600274448 /* SceneDelegate.swift */,
 				9FF6808E262A5AD600274448 /* ViewController.swift */,
 				9FF59CE1263CAEF90024CFD4 /* ScannerViewController.swift */,
+				9FB186F12640BB2200A514EC /* PaymentViewController.swift */,
 				9FF68090262A5AD600274448 /* Main.storyboard */,
 				9FF68093262A5AD900274448 /* Assets.xcassets */,
 				9FF68095262A5AD900274448 /* LaunchScreen.storyboard */,
@@ -142,6 +145,7 @@
 			files = (
 				9FF6808F262A5AD600274448 /* ViewController.swift in Sources */,
 				9FF6808B262A5AD600274448 /* AppDelegate.swift in Sources */,
+				9FB186F22640BB2200A514EC /* PaymentViewController.swift in Sources */,
 				9FF6808D262A5AD600274448 /* SceneDelegate.swift in Sources */,
 				9FF59CE2263CAEF90024CFD4 /* ScannerViewController.swift in Sources */,
 			);

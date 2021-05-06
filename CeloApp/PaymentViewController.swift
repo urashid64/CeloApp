@@ -7,16 +7,17 @@
 
 import UIKit
 
-class PaymentViewController: UIViewController, UITextFieldDelegate {
+class PaymentViewController: UIViewController {
 
     @IBOutlet weak var lblPaymentQRCode: UILabel!
     @IBOutlet weak var lblBalanceQRCode: UILabel!
     @IBOutlet weak var lblPaymentInfo: UILabel!
     @IBOutlet weak var lblBalanceInfo: UILabel!
-    @IBOutlet weak var txtAmount: UITextField!
+    @IBOutlet weak var txtAmount: CurrencyTextField!
     
     var privkey: String!
     var address: String!
+    var amount: String!
 
     struct celoAccount: Decodable {
         enum Category: String, Decodable {
@@ -32,11 +33,16 @@ class PaymentViewController: UIViewController, UITextFieldDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
         address = ""
         privkey = ""
+        amount = ""
+
+        addDoneButtonOnKeyboard()
+        txtAmount.startingValue = 0.0
+        txtAmount.passTextFieldText = { [weak self] enteredStringAmount, amountAsDouble in
+            self?.amount = String(amountAsDouble ?? 0.0)
+        }
 
         paymentObserver = lblPaymentQRCode.observe(\.text) { [weak self] (label, observedChange) in
             let pmtAddress = self?.parseURL(text: self?.lblPaymentQRCode.text ?? "")
@@ -53,6 +59,22 @@ class PaymentViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+    func addDoneButtonOnKeyboard() {
+        let doneToolbar: UIToolbar = UIToolbar(frame: CGRect.init(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50))
+        doneToolbar.barStyle = .default
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        let done: UIBarButtonItem = UIBarButtonItem(title: "Done", style: .done, target: self, action: #selector(self.doneButtonAction))
+        doneToolbar.items = [flexSpace, done]
+        doneToolbar.sizeToFit()
+        txtAmount.inputAccessoryView = doneToolbar
+    }
+
+
+    @objc func doneButtonAction(){
+        txtAmount.resignFirstResponder()
+        print (amount!)
+    }
+
     
     func parseURL(text:String) -> [String:String] {
         guard let url = URL(string:text) else { return [:] }
@@ -138,31 +160,10 @@ class PaymentViewController: UIViewController, UITextFieldDelegate {
     }
 
     @IBAction func onConfirm(_ sender: Any) {
-        let amt = self.txtAmount.text!
-        transfer(toAddr: address, fromPrivKey: privkey, amount: amt)
+        transfer(toAddr: address, fromPrivKey: privkey, amount: amount)
     }
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool
-    {
-        textField.resignFirstResponder()
-        return true
-    }
-
-    @objc func keyboardWillShow(notification: NSNotification) {
-        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-            if self.view.frame.origin.y == 0 {
-                self.view.frame.origin.y -= keyboardSize.height/2
-            }
-        }
-    }
-
-    @objc func keyboardWillHide(notification: NSNotification) {
-        if self.view.frame.origin.y != 0 {
-            self.view.frame.origin.y = 0
-        }
-    }
-
-
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "paymentScanner" {
             let scannerVC = segue.destination as! ScannerViewController

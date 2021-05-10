@@ -47,15 +47,7 @@ class ViewController: UIViewController {
     //-----------------------------------------------------------------------------
     func onQRCodeUpdate () {
         // QR Code changed, clear all fields
-        balance = ""
-        lblCELO.text = ""
-        lblCUSD.text = ""
-
-        for tag in 101...110 {
-            if let label = self.view.viewWithTag(tag) as? UILabel {
-                label.text = ""
-            }
-        }
+        clearAllFields()
 
         // Get account address from URL
         let items = parseURL(text: lblQRCode.text ?? "")
@@ -78,8 +70,22 @@ class ViewController: UIViewController {
 
 
     //-----------------------------------------------------------------------------
+    override func shouldPerformSegue(withIdentifier identifier: String?, sender: Any?) -> Bool {
+        if identifier == "showPaymentView" && address == nil {
+            let alert = UIAlertController (title: "Error", message: "No Card Scanned", preferredStyle: .alert)
+            alert.addAction (UIAlertAction (title: "Close", style: .default, handler: nil))
+
+            self.present(alert, animated: true, completion: nil)
+            return false
+        }
+    
+        return true
+    }
+    
+
+    //-----------------------------------------------------------------------------
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "showScanner" {
+        if segue.identifier == "showScannerView" {
             let scannerVC = segue.destination as! ScannerViewController
             scannerVC.callback = { text in
                 scannerVC.dismiss(animated: true, completion: {self.lblQRCode.text = text})
@@ -156,9 +162,43 @@ class ViewController: UIViewController {
         lblCELO.text = String (format: "%0.02f", Double(account.celo) ?? "")
         lblCUSD.text = String (format: "%0.02f", Double(account.cUsd) ?? "")
     }
-
     
+    //-----------------------------------------------------------------------------
+    func clearAllFields () {
+        balance = ""
+        lblCELO.text = ""
+        lblCUSD.text = ""
+
+        for tag in 101...110 {
+            if let label = self.view.viewWithTag(tag) as? UILabel {
+                label.text = ""
+            }
+        }
+    }
+
+    //-----------------------------------------------------------------------------
+    @IBAction func onBtnRefresh(_ sender: Any) {
+        if address == nil {
+            return
+        }
+        // Start Activity Indicator
+        indNetActivity.startAnimating()
+
+        // Get Balance for address and update fields
+        fetchBalace(addr: address)
+    }
+    
+    
+    //-----------------------------------------------------------------------------
+    @IBAction func onBtnClear(_ sender: Any) {
+        address = nil
+        clearAllFields()
+    }
+    
+    
+    //-----------------------------------------------------------------------------
     @IBAction func cancelPayment( _ seg: UIStoryboardSegue) {
+        // do nothing
     }
 }
 
